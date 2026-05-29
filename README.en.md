@@ -1,0 +1,44 @@
+# DotNetMinimalAPI
+
+This is a project created for learning and practicing **.NET Minimal API** development. The main objective is to get hands-on experience with the .NET Core architecture, routing configuration, dependency injection, and the lightweight approach to building APIs.
+
+## Project Environment
+- Framework: .NET (depending on your installation, e.g., .NET 8 or higher)
+- Language: C#
+
+## How to Start the Project
+
+Please ensure you have the appropriate version of the [.NET SDK](https://dotnet.microsoft.com/download) installed on your machine.
+
+### 1. Start using the Terminal (Command Line)
+
+Navigate your terminal to the project directory and run the following command:
+
+**Normal Run Mode:**
+```bash
+dotnet run
+```
+
+**Developer Mode (Hot Reload):**
+(Recommended for development. When you modify and save the code, the API server will automatically reload without requiring a manual restart.)
+```bash
+dotnet watch run
+```
+
+### 2. Start using an IDE
+
+- **VS Code**: 
+  1. Open VS Code in the project root directory (`code .`).
+  2. If the C# / C# Dev Kit extension is installed, press `F5` to start debugging.
+- **Visual Studio / Rider**:
+  1. Open the project folder or the `.csproj` file directly.
+  2. Click the "Run" button at the top or press `F5` to start executing.
+
+## Testing the API
+
+Once the project successfully starts, the API will run on `http://localhost:5074` by default (based on the `Properties/launchSettings.json` configuration).
+
+You can open a browser or use an API testing tool (such as Postman, Thunder Client, curl) to send a request for testing. For example:
+```
+http://localhost:5074/todos
+```
