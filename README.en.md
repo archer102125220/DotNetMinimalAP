@@ -8,6 +8,9 @@ This is a project created for learning and practicing **.NET Minimal API** devel
 
 ## How to Start the Project
 
+> [!NOTE]
+> **Notice for Mac Users**: Microsoft has retired Visual Studio for Mac (support for Visual Studio 2022 for Mac has ended). Therefore, for developing modern .NET projects on a Mac, the officially recommended and mainstream approach is to use the **.NET CLI** (command line) paired with VS Code or Rider.
+
 Please ensure you have the appropriate version of the [.NET SDK](https://dotnet.microsoft.com/download) installed on your machine.
 
 ### 1. Start using the Terminal (Command Line)

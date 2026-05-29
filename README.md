@@ -8,6 +8,9 @@
 
 ## 如何啟動專案
 
+> [!NOTE]
+> **Mac 使用者請注意**：微軟已經宣布淘汰 Mac 版的 Visual Studio（Visual Studio 2022 for Mac 已停止更新），因此在 Mac 環境下開發最新的 .NET 專案，官方推薦且主流的做法是直接使用 **.NET CLI**（命令列指令）搭配 VS Code 或 Rider。
+
 請先確保你的電腦已安裝適當版本的 [.NET SDK](https://dotnet.microsoft.com/download)。
 
 ### 1. 使用終端機 (命令列) 啟動
