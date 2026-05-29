@@ -3,7 +3,7 @@
 This is a project created for learning and practicing **.NET Minimal API** development. The main objective is to get hands-on experience with the .NET Core architecture, routing configuration, dependency injection, and the lightweight approach to building APIs.
 
 ## Project Environment
-- Framework: .NET (depending on your installation, e.g., .NET 8 or higher)
+- Framework: .NET 10.0
 - Language: C#
 
 ## How to Start the Project
