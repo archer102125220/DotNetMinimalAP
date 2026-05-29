@@ -2,6 +2,18 @@
 
 This is a project created for learning and practicing **.NET Minimal API** development. The main objective is to get hands-on experience with the .NET Core architecture, routing configuration, dependency injection, and the lightweight approach to building APIs.
 
+## What is a Minimal API?
+
+Minimal API is a lightweight pattern for building HTTP APIs introduced in .NET 6. Compared to the traditional Controllers-based architecture, Minimal API significantly reduces boilerplate code and complex configuration. Developers can use very little code, often within a single file (`Program.cs`), to quickly define routing and request handling logic.
+
+### When is it typically used?
+
+- **Microservices Architecture**: Perfect for building single-purpose, small, and lightweight independent microservices.
+- **Rapid Prototyping**: When you need to quickly validate concepts or build API endpoints in the early stages of development, it saves time by skipping the full Controller architecture setup.
+- **Single-Purpose APIs**: Such as an API solely responsible for receiving Webhooks, handling simple Serverless Functions, or providing a basic query interface.
+- **Performance-Sensitive Lightweight Apps**: Because of its fast startup time and low resource consumption, it's suitable for deployment in resource-constrained environments (like edge computing or containers).
+- **Learning for Beginners**: By removing complex directory structures and the concept of controllers, beginners can focus more directly on understanding the fundamentals of HTTP requests and routing.
+
 ## Project Environment
 - Framework: .NET 10.0
 - Language: C#
