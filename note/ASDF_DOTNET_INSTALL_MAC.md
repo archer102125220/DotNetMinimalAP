@@ -34,7 +34,7 @@ asdf list all dotnet-core
 這會列出非常多版本（包括不同的 Patch 號）。建議找出您需要的 Major 版本最新版（如 `10.0.xxx` 或 `8.0.xxx`）。
 
 ### 執行安裝
-針對本專案 (DotNetMvcAPI)，我們使用 .NET 10.0 SDK (例如 `10.0.100`)，請執行：
+針對本專案 (DotNetMinimalAPI)，我們使用 .NET 10.0 SDK (例如 `10.0.100`)，請執行：
 
 ```bash
 asdf install dotnet-core 10.0.100

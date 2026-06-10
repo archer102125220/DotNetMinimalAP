@@ -185,7 +185,13 @@ dotnet publish -c Release -r win-x64 --self-contained
 
 ---
 
-## 注意事項
+## 注意事項與常見檢查清單
 
 - **AOT 限制**：因為專案啟用了 Native AOT，某些依賴於執行期反射 (Runtime Reflection) 或動態程式碼生成 (Dynamic Code Generation) 的套件可能無法正常運作。部署前務必在本地進行充分測試。
 - **Swagger/OpenAPI**：在 `Production` 環境下，預設通常會關閉 Swagger (`if (app.Environment.IsDevelopment())`)，請確保在正式環境的配置符合安全規範。
+- **資料庫連線字串**：確保 `appsettings.Production.json` 或環境變數中的連線字串是指向正式環境的資料庫。
+- **SSL/HTTPS**：在正式環境中，強烈建議使用 HTTPS。可以在 Nginx 或 IIS 反向代理層級設定憑證。
+- **日誌紀錄 (Logging)**：設定適當的 Log 等級 (例如 Warning 或 Error) 並將 Log 輸出到集中式 Log 管理系統或檔案，避免填滿硬碟。
+
+> [!IMPORTANT]
+> 部署前請務必確保所有的機密資訊（如 API Keys, 資料庫密碼）都已從程式碼與 `appsettings.json` 中移除，並改用環境變數或安全的金鑰管理服務（如 Azure Key Vault, AWS Secrets Manager）來讀取。
