@@ -1,8 +1,13 @@
 using System.Text.Json.Serialization;
+using DotNetMinimalAPI.CompiledModels;
+using DotNetMinimalAPI.Data;
+using DotNetMinimalAPI.Models;
+using DotNetMinimalAPI.Models.Dtos;
+using DotNetMinimalAPI.Routes;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-
-var builder = WebApplication.CreateSlimBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
 // 配置 JSON 序列化（為了支援 AOT 編譯）
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -13,7 +18,12 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 // 加入 OpenAPI 文件產生服務
 builder.Services.AddOpenApi();
 
-var app = builder.Build();
+// 註冊 Oracle DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseOracle(builder.Configuration.GetConnectionString("OracleDemoConnection"))
+           .UseModel(AppDbContextModel.Instance));
+
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -26,7 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // 建立一個在記憶體中的 List 當作暫時的資料庫
-var sampleTodos = new List<Todo>
+List<Todo> sampleTodos = new List<Todo>
 {
     new(1, "Walk the dog"),
     new(2, "Do the dishes", DateOnly.FromDateTime(DateTime.Now)),
@@ -35,7 +45,11 @@ var sampleTodos = new List<Todo>
     new(5, "Clean the car", DateOnly.FromDateTime(DateTime.Now.AddDays(2)))
 };
 
-var todosApi = app.MapGroup("/todos");
+RouteGroupBuilder todosApi = app.MapGroup("/todos");
+
+// 註冊 Oracle 示範 API 路由
+app.MapGroup("/api/oracle-demo")
+   .MapOracleDemoRoutes();
 
 // 1. GET: 取得所有 Todo
 todosApi.MapGet("/", () => sampleTodos)
@@ -54,8 +68,8 @@ todosApi.MapGet("/{id}", Results<Ok<Todo>, NotFound> (int id) =>
 todosApi.MapPost("/", (Todo todo) =>
 {
     // 自動產生新的 ID
-    var newId = sampleTodos.Count > 0 ? sampleTodos.Max(t => t.Id) + 1 : 1;
-    var newTodo = todo with { Id = newId }; // 替換掉傳入的 ID
+    int newId = sampleTodos.Count > 0 ? sampleTodos.Max(t => t.Id) + 1 : 1;
+    Todo newTodo = todo with { Id = newId }; // 替換掉傳入的 ID
     
     sampleTodos.Add(newTodo);
     return TypedResults.Created($"/todos/{newId}", newTodo);
@@ -66,7 +80,7 @@ todosApi.MapPost("/", (Todo todo) =>
 // 4. PUT: 完整更新特定 ID 的 Todo
 todosApi.MapPut("/{id}", Results<NoContent, NotFound> (int id, Todo updatedTodo) =>
 {
-    var index = sampleTodos.FindIndex(t => t.Id == id);
+    int index = sampleTodos.FindIndex(t => t.Id == id);
     if (index == -1) return TypedResults.NotFound();
 
     // 替換為新的資料，但保留原本的 ID
@@ -79,13 +93,13 @@ todosApi.MapPut("/{id}", Results<NoContent, NotFound> (int id, Todo updatedTodo)
 // 5. PATCH: 部分更新特定 ID 的 Todo
 todosApi.MapPatch("/{id}", Results<NoContent, NotFound> (int id, TodoPatch patchTodo) =>
 {
-    var index = sampleTodos.FindIndex(t => t.Id == id);
+    int index = sampleTodos.FindIndex(t => t.Id == id);
     if (index == -1) return TypedResults.NotFound();
 
-    var existing = sampleTodos[index];
+    Todo existing = sampleTodos[index];
     
     // 如果 patchTodo 中有值，就更新；否則保留舊值
-    var updated = existing with 
+    Todo updated = existing with 
     { 
         Title = patchTodo.Title ?? existing.Title,
         DueBy = patchTodo.DueBy ?? existing.DueBy,
@@ -101,7 +115,7 @@ todosApi.MapPatch("/{id}", Results<NoContent, NotFound> (int id, TodoPatch patch
 // 6. DELETE: 刪除特定 ID 的 Todo
 todosApi.MapDelete("/{id}", Results<NoContent, NotFound> (int id) =>
 {
-    var removedCount = sampleTodos.RemoveAll(t => t.Id == id);
+    int removedCount = sampleTodos.RemoveAll(t => t.Id == id);
     return removedCount > 0 ? TypedResults.NoContent() : TypedResults.NotFound();
 })
 .WithName("DeleteTodo")
@@ -157,6 +171,14 @@ public record TodoPatch(string? Title, DateOnly? DueBy, bool? IsComplete);
 [JsonSerializable(typeof(List<Todo>))]
 [JsonSerializable(typeof(Todo))]
 [JsonSerializable(typeof(TodoPatch))]
+[JsonSerializable(typeof(OracleDemoItem))]
+[JsonSerializable(typeof(OracleDemoCategory))]
+[JsonSerializable(typeof(List<OracleDemoItem>))]
+[JsonSerializable(typeof(List<OracleDemoCategory>))]
+[JsonSerializable(typeof(OracleDemoItemResponse))]
+[JsonSerializable(typeof(List<OracleDemoItemResponse>))]
+[JsonSerializable(typeof(CreateOracleDemoItemRequest))]
+[JsonSerializable(typeof(UpdateOracleDemoItemRequest))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 }
