@@ -1,0 +1,18 @@
+---
+description: No Scripts for Refactoring
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# No Scripts for Refactoring
+
+## 🚫 Absolute Prohibition on Automated Refactoring Scripts
+
+- **Rule**: AI agents are **strictly forbidden** from writing, proposing, or executing generic bash scripts (`sed`, `awk`), PowerShell scripts, or any regex-based text processing scripts to perform C# code refactoring or bulk modifications.
+- **Reason**: C# is a strongly typed, compiled language. Simple text replacement tools do not understand scope, syntax, using directives, or object-oriented structures, leading to broken builds and corrupted files.
+
+## ✅ Permitted Refactoring Methods
+
+- Use specialized code editing AI tools (e.g., `replace_file_content`, `multi_replace_file_content`).
+- Ensure the resulting C# code is syntactically valid and properly references namespaces (`using`).
+- Always run a build check (`dotnet build`) after large refactoring operations.

@@ -1,0 +1,20 @@
+# API Architecture & Structure (Minimal API)
+
+This project strictly follows the **Minimal API** architectural pattern. MVC structure is forbidden.
+
+## 1. Routing (`Program.cs` & `Routes/`)
+- **No Controllers**: All endpoints are defined using `MapGet`, `MapPost`, etc., on the `WebApplication` or `RouteGroupBuilder` instances.
+- **Extension Methods**: When `Program.cs` grows too large, extract routes into static extension methods inside the `Routes/` folder (e.g., `TodoRoutes.cs`).
+
+## 2. Models & DTOs
+- **Entities**: EF Core database models go in `Models/`.
+- **DTOs**: Data Transfer Objects (Request/Response shapes) go in `Models/Dtos/` and must be declared as `record` types.
+
+## 3. Services
+- Business logic should be extracted into classes in the `Services/` folder if Route Handlers become too complex.
+
+## 4. Data
+- Entity Framework Core `DbContext` belongs in the `Data/` folder.
+
+## 5. Exclusions
+- **Forbidden**: `Controllers/` folder, `ControllerBase`, `[ApiController]`, `Views/`, HTML/Razor pages. This is a pure JSON API backend.

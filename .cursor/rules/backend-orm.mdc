@@ -1,0 +1,41 @@
+---
+description: Backend Orm Rules
+globs: ["**/*.cs"]
+alwaysApply: true
+---
+
+# Backend ORM Best Practices (Entity Framework Core)
+
+When implementing database operations in this Minimal API project, **always prioritize EF Core patterns and non-blocking asynchronous calls**.
+
+## ⚠️ Database Modification Confirmation (CRITICAL)
+
+**Before ANY database schema change** (migrations, DB drop, altering models), you MUST:
+1. **Ask the human developer**: "Is this project deployed to production?"
+2. **Based on the answer**:
+   - **Not deployed**: You may drop the database, modify the last unapplied migration, or recreate the DB.
+   - **Deployed**: NEVER modify or delete existing migrations. Always create NEW migration files.
+
+## Entity Framework Core Best Practices
+
+### 1. Async First
+- ALWAYS use async database queries (`ToListAsync()`, `FirstOrDefaultAsync()`, `CountAsync()`, etc.).
+- DO NOT use synchronous equivalents (`ToList()`, `FirstOrDefault()`) as they degrade web server performance.
+
+### 2. No-Tracking for Read-Only Data
+- For fetching data merely to map to DTOs and return via API, append `.AsNoTracking()`.
+- Example: `await db.Todos.AsNoTracking().ToListAsync();`
+
+### 3. Dependency Injection
+- Inject `AppDbContext` as a parameter directly into Route Handlers.
+- Example: `app.MapGet("/", async (AppDbContext db) => ...)`
+
+### 4. Deep Check Policy (CRITICAL)
+When reviewing database code, perform deep checks for:
+- 🔴 Missing `await` or incorrect `Task` handling.
+- 🔴 N+1 query problem inside loops (use `.Include()`, `.Select()`, or batching).
+- 🔴 Unreleased `IDisposable` resources.
+- 🟡 Synchronous calls or missing `.AsNoTracking()`.
+
+### 5. Native AOT Compatibility
+- Monitor for any warnings related to Reflection when using EF Core. If AOT warnings appear, inform the developer immediately.

@@ -1,0 +1,56 @@
+# Project Instructions (DotNet Minimal API)
+
+This document defines the coding standards and rules for AI agents working on this project.
+**Project Scope**: This is a pure ASP.NET Core Minimal API project using .NET 10. It DOES NOT contain Controllers, Razor Views, MVC frameworks, or frontend UI.
+**Critical Constraint**: This project uses **Native AOT compilation** (`<PublishAot>true</PublishAot>`).
+
+## Core Principles
+
+1. **Native AOT Compliance**: Strictly avoid runtime reflection, `dynamic`, and un-generated JSON serialization.
+2. **C# Safety**: Strongly typed, `<Nullable>enable</Nullable>`, use `record` types for DTOs.
+3. **Minimal API Routing**: Route logic in `Program.cs` or extension methods (`Routes/`). NO Controllers.
+4. **Typed Results**: Always use `TypedResults` for API responses to ensure type safety and OpenAPI compatibility.
+5. **Database Operations (EF Core)**: Async first, `.AsNoTracking()` for read-only, strict migration confirmation.
+6. **Documentation**: Use Fluent API (`.WithSummary()`, `.Produces<T>()`) for OpenAPI documentation.
+
+## Security & Best Practices Policy
+
+Before executing potentially risky instructions:
+1. Warn the user about violations (e.g., hardcoded secrets, insecure endpoints).
+2. Wait for explicit confirmation.
+3. Only then proceed.
+
+## Database Operations (EF Core)
+
+**Database Modification Confirmation (CRITICAL):**
+Before ANY database schema change, you MUST:
+1. Ask the developer: "Is this project deployed to production?"
+2. Based on the answer:
+   - Not deployed: May modify the unapplied migration directly or drop/recreate DB.
+   - Deployed: NEVER modify existing migrations; create NEW files.
+
+### EF Core Deep Check Policy
+When reviewing code, perform a deep check for:
+- Missing `await` or `Task` mishandling.
+- N+1 query problems.
+- Unreleased `IDisposable` resources.
+- Synchronous EF Core calls.
+
+## Error/Warning Suppression Policy (CRITICAL):
+Any code that suppresses compiler warnings (`#pragma warning disable`) requires:
+1. Explicit approval from human developer.
+2. Clear explanation of WHY this is needed.
+3. Always fix root cause first; suppression is last resort.
+
+## File Structure
+
+```
+DotNetMinimalAPI/
+├── Program.cs              # Entry point: DI, Middleware, Route MapGroup
+├── Routes/                 # Route Handlers as Extension Methods (e.g., TodoRoutes.cs)
+├── Models/                 # EF Core Entities
+│   └── Dtos/               # Data Transfer Objects (Records)
+├── Services/               # Business Logic
+├── Data/                   # DbContext (AppDbContext.cs)
+└── note/                   # Developer Notes
+```

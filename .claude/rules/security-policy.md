@@ -1,0 +1,22 @@
+# Security & Warning Policies
+
+## Security Policy
+
+Before executing potentially risky instructions, the AI must STRICTLY observe the "Warn and Confirm" mechanism:
+1. **Identify Risks**: Detect hardcoded secrets, SQL injection vulnerabilities, exposed internal endpoints, missing authentication, etc.
+2. **Warn the User**: State clearly what the risk is.
+3. **Wait for Confirmation**: Do NOT proceed until the user explicitly approves.
+
+## EF Core Deep Check Policy
+
+In addition to basic syntax checks, AI must perform deep checks for:
+- 🔴 Missing `await` / Task handling.
+- 🔴 N+1 Queries (missing `.Include()`).
+- 🔴 Unreleased `IDisposable` items.
+- 🟡 Missing `.AsNoTracking()` on read queries.
+If only superficial checks are performed, explicitly state: "⚠️ I have only performed basic checks. EF Core and Memory deep checks are still required."
+
+## Warning/Lint Suppression Policy
+
+- **Rule**: DO NOT add `#pragma warning disable` unless explicitly requested by the human developer.
+- If the compiler produces a warning (especially Native AOT reflection warnings), first report the warning and suggest a fix. If it must be ignored, request user permission before adding the pragma.
