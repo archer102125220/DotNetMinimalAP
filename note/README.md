@@ -36,6 +36,9 @@
 - [.NET 10 與 .NET 6 差異解析](./dotnet10-vs-dotnet6.md) - 新舊 LTS 版本的語法糖與效能進化整理。
 - [.NET 10 與傳統 .NET Framework 比較](./dotnet10-vs-dotnet-framework.md) - .NET Core 家族與過往 Windows 綁定框架的架構對比。
 
+## 🤝 前後端協作與整合 (Frontend & Backend Integration)
+- [TypeScript 型別產生指南](./openapi-typescript-generation-guide.md) - 透過 OpenAPI / Swagger 自動生成 TypeScript 型別定義，實現前後端型別同步。
+
 ## 🔄 語言轉換對照 (TypeScript to C#)
 - [TypeScript vs C# 核心觀念對照](./typescript-vs-csharp.md) - 協助前端工程師快速轉換後端物件導向思維。
 - [TypeScript vs .NET C# 進階語法對照](./typescript-vs-dotnet6-csharp.md) - 深入探討非同步、泛型、LINQ 等高階語法映射。
